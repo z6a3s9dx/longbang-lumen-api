@@ -11,6 +11,13 @@
 |
 */
 
+$router->group(['prefix' => 'api/v1/'], function () use ($router) {
+    // 登入驗證
+    $router->group(['prefix' => 'user'], function () use ($router) {
+        $router->post('/login', 'UserController@login');
+    });
+});
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });

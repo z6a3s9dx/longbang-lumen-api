@@ -23,9 +23,26 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-// $app->withFacades();
+$app->withFacades();
+$app->withEloquent();
 
-// $app->withEloquent();
+/*
+|--------------------------------------------------------------------------
+| Configuration
+|--------------------------------------------------------------------------
+*/
+$app->configure('apiCode');
+$app->configure('limit');
+$app->configure('jwt');
+
+$app->alias('auth', 'Illuminate\Auth\AuthManager');
+
+if (!class_exists('JWTAuth')) {
+    class_alias('Tymon\JWTAuth\Facades\JWTAuth', 'JWTAuth');
+}
+if (!class_exists('JWTFactory')) {
+    class_alias('Tymon\JWTAuth\Facades\JWTFactory', 'JWTFactory');
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +84,12 @@ $app->singleton(
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+ $app->routeMiddleware([
+     'auth'        => App\Http\Middleware\Authenticate::class,
+     'jwt.auth'    => Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+     'jwt.refresh' => Tymon\JWTAuth\Middleware\RefreshToken::class,
+ ]);
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
@@ -78,13 +101,13 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
-$app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+ $app->register(App\Providers\AppServiceProvider::class);
+ $app->register(App\Providers\AuthServiceProvider::class);
+ $app->register(App\Providers\EventServiceProvider::class);
 
-$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
-$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
@@ -96,10 +119,10 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 |
 */
 
-$app->router->group([
-    'namespace' => 'App\Http\Controllers',
-], function ($router) {
-    require __DIR__.'/../routes/web.php';
-});
+ $app->router->group([
+     'namespace' => 'App\Http\Controllers',
+ ], function ($router) {
+     require __DIR__.'/../routes/web.php';
+ });
 
-return $app;
+ return $app;
