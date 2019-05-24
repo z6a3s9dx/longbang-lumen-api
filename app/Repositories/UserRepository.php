@@ -17,4 +17,39 @@ class UserRepository
     {
         return User::find($id)->update($parameters);
     }
+
+    public function getUserList($account)
+    {
+        return User::where($account)->get();
+        //return User::all();
+        //return User::get();
+
+    }
+
+    public function create($parameters)
+    {
+        return User::create($parameters);
+    }
+
+    public function editUser($id, $parameters)
+    {
+        return User::find($id)->update($parameters);
+    }
+
+    public function find()
+    {
+        return User::get();
+    }
+
+    public function delete($id)
+    {
+        //dd($id['id']);
+        //return User::destroy($id['id']);
+        return User::destroy($id);
+    }
+
+    public function oldToken()
+    {
+        return User::get();
+    }
 }

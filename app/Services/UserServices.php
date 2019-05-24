@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
+use App\Repositories\UserLoginRepository;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\JWTAuth;
@@ -10,14 +12,17 @@ use Tymon\JWTAuth\JWTAuth;
 class UserServices
 {
     private $userRepository;
+    private $userLoginRepository;
 
     protected $JWTAuth;
 
     public function __construct(
         UserRepository $userRepository,
+        UserLoginRepository $userLoginRepository,
         JWTAuth $JWTAuth
     ) {
         $this->userRepository = $userRepository;
+        $this->userLoginRepository = $userLoginRepository;
         $this->JWTAuth = $JWTAuth;
     }
 
@@ -27,11 +32,13 @@ class UserServices
      * @param  Request $request
      * @return array
      */
-    public function login(array $request) : array
+    public function login($request)
     {
+
         $user = [];
         // 驗證帳號密碼是否正確
         try {
+
             if (!$user['token'] = $this->JWTAuth->attempt([
                 'account'  => $request['account'],
                 'password' => $request['password'],
@@ -53,6 +60,15 @@ class UserServices
         try {
             $user['user'] = $this->JWTAuth->setToken($user['token'])->toUser();
             $this->userRepository->update($user['user']->id, ['token' => $user['token']]);
+
+            $this->userLoginRepository->create([
+                'user_id' =>$user['user']['id'],
+                'user_account' => $user['user']['account'],
+                'user_name' => $user['user']['name'],
+                'login_ip' => $request->ip(),
+                'status' => $user['user']['active'],
+            ]);
+            //dd($test);
             return [
                 'code'   => config('apiCode.success'),
                 'result' => $user,
@@ -64,4 +80,96 @@ class UserServices
             ];
         }
     }
+
+    public function list($request)
+    {
+        try {
+            //dd($id);
+                $user = $this->userRepository->getUserList(['account'=>$request['account']]);
+            return [
+                'code'   => config('apiCode.success'),
+                'result' => $user,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'code'  => $e->getCode() ?? config('apiCode.notAPICode'),
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
+    public function create($request)
+    {
+
+        try{
+            $result = $this->userRepository->create([
+                'account' => $request['account'],
+                'password' => Hash::make('password'),
+                'active' => 1,
+            ]);
+            //dd($result);
+            return [
+                'code'   => config('apiCode.success'),
+                'result' => $result,
+            ];
+        }catch (\Exception $e){
+            return [
+                'code'  => $e->getCode() ?? config('apiCode.notAPICode'),
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
+    public function editUser($request)
+    {
+        try{
+            $parseToken = $this->JWTAuth->parseToken()->authenticate();
+            //dd($parseToken);
+            $result = $this->userRepository->editUser($parseToken['id'],[
+                'account' => $request['account'],
+                'password' => Hash::make($request['password']),
+                'name' => $request['name'],
+            ]);
+            //若有修改到admin密碼則會登出
+
+            //dd($result);
+            return [
+                'code'   => config('apiCode.success'),
+                'result' => $result
+            ];
+        }catch (\Exception $e){
+            return [
+                'code'  => $e->getCode() ?? config('apiCode.notAPICode'),
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
+    public function delete()
+    {
+        try{
+            $parseToken = $this->JWTAuth->parseToken()->authenticate();
+            //dd($parseToken['id']);
+            if ($parseToken['account'] !== "thothadmin")
+            {
+                $result = $this->userRepository->delete($parseToken['id']);
+                //dd($result);
+                return [
+                    'code'   => config('apiCode.success'),
+                    'result' => $result
+                ];
+            }else{
+                return[
+                  'code' => config('apiCode.validateFail'),
+                  'error' => 'admin'
+                ];
+            }
+        }catch (\Exception $e){
+            return [
+                'code'  => $e->getCode() ?? config('apiCode.notAPICode'),
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
 }

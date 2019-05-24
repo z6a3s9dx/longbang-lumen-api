@@ -24,7 +24,7 @@ return [
     /**
     * HTTP STATUS CODE    : ４２２
     */
-    // 驗證失敗
+    // 驗證失敗z
     'validateFail'        => 422001,
 
     /**

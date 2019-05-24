@@ -19,7 +19,18 @@ class UsersTableSeeder extends Seeder
                 'password'   => Hash::make('password'),
                 'name'       => '圖特人員',
                 'active'     => 1,
-                'created_at' => \Carbon\Carbon::now(),
+                'created_at' => '2018-05-01 00:00:00',//\Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now(),
+            ]);
+        }
+        $defaultUser = DB::table('users')->where('account', 'thothtest')->first();
+        if ($defaultUser === null) {
+            DB::table('users')->insert([
+                'account'    => 'thothtest',
+                'password'   => Hash::make('password'),
+                'name'       => '圖特test',
+                'active'     => 2,
+                'created_at' => '2018-05-02 00:00:00',//\Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now(),
             ]);
         }
