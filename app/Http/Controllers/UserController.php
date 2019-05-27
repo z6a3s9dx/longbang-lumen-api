@@ -21,6 +21,7 @@ class UserController extends Controller
      *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function login(Request $request)
     {
@@ -34,7 +35,10 @@ class UserController extends Controller
     }
 
     /**
-     *取得使用者清單資訊
+     * 取得使用者清單資訊
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function list(Request $request)
     {
@@ -57,6 +61,9 @@ class UserController extends Controller
 
     /**
      *新增使用者
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function create(Request $request)
     {
@@ -78,6 +85,10 @@ class UserController extends Controller
 
     /**
      *編輯使用者
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function editUser(Request $request)
     {
@@ -95,6 +106,8 @@ class UserController extends Controller
 
     /**
      *刪除使用者
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function delete(Request $request)
     {

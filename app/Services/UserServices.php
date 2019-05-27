@@ -81,6 +81,12 @@ class UserServices
         }
     }
 
+    /**
+     * 取得使用者清單資訊
+     *
+     * @param  Request $request
+     * @return array
+     */
     public function list($request)
     {
         try {
@@ -98,6 +104,12 @@ class UserServices
         }
     }
 
+    /**
+     * 新增使用者
+     *
+     * @param  Request $request
+     * @return array
+     */
     public function create($request)
     {
 
@@ -120,6 +132,12 @@ class UserServices
         }
     }
 
+    /**
+     * 編輯使用者
+     *
+     * @param  Request $request
+     * @return array
+     */
     public function editUser($request)
     {
         try{
@@ -129,6 +147,7 @@ class UserServices
                 'account' => $request['account'],
                 'password' => Hash::make($request['password']),
                 'name' => $request['name'],
+                'active' =>$request['active'],
             ]);
             //若有修改到admin密碼則會登出
 
@@ -145,6 +164,12 @@ class UserServices
         }
     }
 
+    /**
+     * 刪除使用者
+     *
+     * @param  Request $request
+     * @return array
+     */
     public function delete()
     {
         try{

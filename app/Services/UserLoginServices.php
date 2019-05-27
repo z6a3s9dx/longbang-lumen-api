@@ -25,6 +25,13 @@ class UserLoginServices
         $this->UserLoginServices = $UserLoginServices;
         $this->JWTAuth = $JWTAuth;
     }
+
+    /**
+     * 使用者登入日誌
+     *
+     * @param  Request $request
+     * @return array
+     */
     public function list($request)
     {
         try {

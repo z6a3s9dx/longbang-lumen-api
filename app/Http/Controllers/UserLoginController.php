@@ -23,6 +23,13 @@ class UserLoginController extends Controller
         $this->userLoginServices = $userLoginServices;
     }
 
+    /**
+     * 登入驗證
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function list(Request $request)
     {
         //dd($request->all());
