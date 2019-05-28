@@ -29,7 +29,7 @@ class UserServices
     /**
      * 登入驗證
      *
-     * @param  Request $request
+     * @param  Request $request [需有id、account]
      * @return array
      */
     public function login($request)
@@ -84,7 +84,7 @@ class UserServices
     /**
      * 取得使用者清單資訊
      *
-     * @param  Request $request
+     * @param  Request $request  [需有account]
      * @return array
      */
     public function list($request)
@@ -107,7 +107,7 @@ class UserServices
     /**
      * 新增使用者
      *
-     * @param  Request $request
+     * @param  Request $request [需有account、password]
      * @return array
      */
     public function create($request)
@@ -135,7 +135,7 @@ class UserServices
     /**
      * 編輯使用者
      *
-     * @param  Request $request
+     * @param  Request $request [需有account、password、name、active]
      * @return array
      */
     public function editUser($request)
