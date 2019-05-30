@@ -6,6 +6,7 @@ return [
     'users' => [
         'account'  => 'alpha_num|between:4,12',
         'password' => 'alpha_num|between:8,12',
+        'confirm_password' => 'alpha_num|between:8,12|confirmed',
         'name'     => 'max:10'
     ],
 

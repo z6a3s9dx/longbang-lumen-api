@@ -70,7 +70,7 @@ class UserController extends Controller
         $limit = config('limit.users');
         $validator=Validator::make($request->all(), [
             'account'  => 'required|'.$limit['account'],
-            //'password' => 'required|'.$limit['password'],
+            'confirm_password' => 'required|'.$limit['password'],
         ]);
         // 驗證參數
         if ($validator->fails()) {
@@ -97,6 +97,7 @@ class UserController extends Controller
         $this->validate($request, [
             'account'  => 'required|'.$limit['account'],
             'password' => 'required|'.$limit['password'],
+            'confirm_password' => 'required|'.$limit['password'],
         ]);
 
     //dd($request);
