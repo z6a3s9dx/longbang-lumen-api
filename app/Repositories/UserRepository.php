@@ -21,9 +21,6 @@ class UserRepository
     public function getUserList($account)
     {
         return User::where($account)->get();
-        //return User::all();
-        //return User::get();
-
     }
 
     public function create($parameters)
@@ -43,8 +40,6 @@ class UserRepository
 
     public function delete($id)
     {
-        //dd($id['id']);
-        //return User::destroy($id['id']);
         return User::destroy($id);
     }
 

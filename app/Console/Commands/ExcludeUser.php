@@ -60,7 +60,6 @@ class ExcludeUser extends Command
     {
         $oldToken = $this->userRepository->oldToken();
         foreach ($oldToken as $key => $value){
-           // dd($value->token);
             if ($value->token != null){
                 $this->JWTAuth->setToken($value->token)->invalidate();
 

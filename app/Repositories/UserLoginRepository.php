@@ -18,9 +18,6 @@ class UserLoginRepository
 
     public function  list($account,$time,$time_end)
     {
-        //dd(UserLogin::where($account));
-        //return UserLogin::where($account)->get();
         return UserLogin::where($account)->whereBetween('created_at',[$time,$time_end])->get();
-
     }
 }

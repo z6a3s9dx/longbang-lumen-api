@@ -32,16 +32,13 @@ class UserLoginController extends Controller
      */
     public function list(Request $request)
     {
-        //dd($request->all());
         $limit = config('limit');
-
-        //$limit_account = config('limit.user_login');
 
         $this->validate($request, [
             'user_account'  => 'required|'.$limit['users']['account'],
             'time'  => 'required|'.$limit['user_login']['time'],
             'time_end'  => 'required|'.$limit['user_login']['time'],
-        ]);       // $test=dd($test);
+        ]);
 
         return $this->responseWithJson($request,$this->userLoginServices->list($request));
     }

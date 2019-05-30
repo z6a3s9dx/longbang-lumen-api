@@ -35,11 +35,6 @@ class UserLoginServices
     public function list($request)
     {
         try {
-            //dd($request['time_end']);
-
-            /*$user_log = $this->UserLoginServices->list([
-                'user_account' => $account['user_account']
-            ],[],[]);*/
             $user_log = $this->UserLoginServices->list
             (
                 ['user_account' => $request['user_account']],

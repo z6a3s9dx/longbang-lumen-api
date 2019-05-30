@@ -30,7 +30,7 @@ class UserController extends Controller
             'account'  => 'required|'.$limit['account'],
             'password' => 'required|'.$limit['password'],
         ]);
-        //dd($test);
+
         return $this->responseWithJson($request, $this->userServices->login($request));
     }
 
@@ -45,17 +45,15 @@ class UserController extends Controller
         $limit = config('limit.users');
         $validator=Validator::make($request->all(), [
             'account'  => 'required|'.$limit['account'],
-            //'password' => 'required|'.$limit['password'],
         ]);
         // 驗證參數
         if ($validator->fails()) {
             return $this->responseWithJson($request, [
-                'result' => '',
                 'code' => config('apiCode.validateFail'),
                 'error' => $validator->errors()->first()
             ]);
         }
-//        dd($request->all());
+
         return $this->responseWithJson($request, $this->userServices->list($request->all()));
     }
 
@@ -70,7 +68,8 @@ class UserController extends Controller
         $limit = config('limit.users');
         $validator=Validator::make($request->all(), [
             'account'  => 'required|'.$limit['account'],
-            'confirm_password' => 'required|'.$limit['password'],
+            'password' => 'required|'.$limit['password'],
+            'password_confirmation' => 'required|'.$limit['password_confirmation'],
         ]);
         // 驗證參數
         if ($validator->fails()) {
@@ -78,7 +77,6 @@ class UserController extends Controller
                 'error' => $validator->errors()->first()];
             return $this->responseWithJson($request, $result);
         }
-        //dd($request->all());
 
         return $this->responseWithJson($request, $this->userServices->create($request));
     }
@@ -97,10 +95,8 @@ class UserController extends Controller
         $this->validate($request, [
             'account'  => 'required|'.$limit['account'],
             'password' => 'required|'.$limit['password'],
-            'confirm_password' => 'required|'.$limit['password'],
+            'password_confirmation' => 'required|'.$limit['password_confirmation'],
         ]);
-
-    //dd($request);
 
         return $this->responseWithJson($request, $this->userServices->editUser($request));
     }

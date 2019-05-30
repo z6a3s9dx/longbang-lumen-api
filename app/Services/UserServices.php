@@ -68,7 +68,6 @@ class UserServices
                 'login_ip' => $request->ip(),
                 'status' => $user['user']['active'],
             ]);
-            //dd($test);
             return [
                 'code'   => config('apiCode.success'),
                 'result' => $user,
@@ -90,7 +89,6 @@ class UserServices
     public function list($request)
     {
         try {
-            //dd($id);
                 $user = $this->userRepository->getUserList(['account'=>$request['account']]);
             return [
                 'code'   => config('apiCode.success'),
@@ -116,10 +114,9 @@ class UserServices
         try{
             $result = $this->userRepository->create([
                 'account' => $request['account'],
-                'password' => Hash::make('password'),
+                'password' => Hash::make($request['password']),
                 'active' => 1,
             ]);
-            //dd($result);
             return [
                 'code'   => config('apiCode.success'),
                 'result' => $result,
@@ -142,16 +139,12 @@ class UserServices
     {
         try{
             $parseToken = $this->JWTAuth->parseToken()->authenticate();
-            //dd($parseToken);
             $result = $this->userRepository->editUser($parseToken['id'],[
                 'account' => $request['account'],
                 'password' => Hash::make($request['password']),
                 'name' => $request['name'],
                 'active' =>$request['active'],
             ]);
-            //若有修改到admin密碼則會登出
-
-            //dd($result);
             return [
                 'code'   => config('apiCode.success'),
                 'result' => $result
@@ -174,11 +167,9 @@ class UserServices
     {
         try{
             $parseToken = $this->JWTAuth->parseToken()->authenticate();
-            //dd($parseToken['id']);
             if ($parseToken['account'] !== "thothadmin")
             {
                 $result = $this->userRepository->delete($parseToken['id']);
-                //dd($result);
                 return [
                     'code'   => config('apiCode.success'),
                     'result' => $result
