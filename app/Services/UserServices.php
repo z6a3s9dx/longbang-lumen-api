@@ -89,11 +89,37 @@ class UserServices
     public function list($request)
     {
         try {
-                $user = $this->userRepository->getUserList(['account'=>$request['account']]);
+            /*$query = $this->userRepository->initQuery();
+            if ($request->input('account') != '') {
+                dd($request->input('account'));
+                $query = $this->userRepository->whereAccount($query, $request->input('account'));
+            }
             return [
-                'code'   => config('apiCode.success'),
-                'result' => $user,
+                'code' => 200001,
+                'result' => $this->userRepository->getData($query)
+
             ];
+
+            dd($request->has('account'));
+            return [
+               'code' => '200001',
+              'result' => $this->userRepository->getUserList($request->input('account')),
+            ];*/
+
+            //$query = $this->userRepository->initQuery();
+            //dd($request->input('account'));
+            //if ($request != ''){
+/*if(isset($request['account'])){}*/
+                    $user = $this->userRepository->getUserList($request->input('account'));
+                //dd($user->count());
+                    //dd(123);
+                    return [
+                    'code'   => config('apiCode.success'),
+                    'result' => $user,
+                ];
+                    //}
+
+
         } catch (\Exception $e) {
             return [
                 'code'  => $e->getCode() ?? config('apiCode.notAPICode'),
@@ -112,6 +138,7 @@ class UserServices
     {
 
         try{
+            /*if(){}*/
             $result = $this->userRepository->create([
                 'account' => $request['account'],
                 'password' => Hash::make($request['password']),
@@ -163,13 +190,13 @@ class UserServices
      * @param  Request $request
      * @return array
      */
-    public function delete()
+    public function delete($request)
     {
         try{
             $parseToken = $this->JWTAuth->parseToken()->authenticate();
             if ($parseToken['account'] !== "thothadmin")
-            {
-                $result = $this->userRepository->delete($parseToken['id']);
+            {//dd($request->all());
+                $result = $this->userRepository->delete($parseToken['id'], ['account' => $request['account']]);
                 return [
                     'code'   => config('apiCode.success'),
                     'result' => $result
@@ -177,7 +204,7 @@ class UserServices
             }else{
                 return[
                   'code' => config('apiCode.validateFail'),
-                  'error' => 'admin'
+                  'error' => 'admin not delete'
                 ];
             }
         }catch (\Exception $e){

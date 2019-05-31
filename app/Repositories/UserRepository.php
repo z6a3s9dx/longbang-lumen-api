@@ -18,9 +18,32 @@ class UserRepository
         return User::find($id)->update($parameters);
     }
 
+   /* public function initQuery()
+    {
+        return User::select(['id', 'account']);
+    }
+
+    public function whereAccount($query, $account)
+    {
+        return $query->where('account', $account);
+    }
+
+    public function getData($query)
+    {
+        return $query->orderBy('id', 'DESC')->paginate(5);
+    }*/
+
     public function getUserList($account)
     {
-        return User::where($account)->get();
+        //dd(456);
+        //return User::where('account',$account)->get();
+        $query = User::select();
+        if ($account != '') {
+            $query = $query->where('account', $account);
+        }
+
+        return $query->get();
+
     }
 
     public function create($parameters)
@@ -38,9 +61,9 @@ class UserRepository
         return User::get();
     }
 
-    public function delete($id)
+    public function delete($id, $account)
     {
-        return User::destroy($id);
+        return User::find($id)->destroy($account);
     }
 
     public function oldToken()

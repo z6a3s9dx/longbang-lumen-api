@@ -44,7 +44,7 @@ class UserController extends Controller
     {
         $limit = config('limit.users');
         $validator=Validator::make($request->all(), [
-            'account'  => 'required|'.$limit['account'],
+            'account'  => $limit['account'],
         ]);
         // 驗證參數
         if ($validator->fails()) {
@@ -53,8 +53,7 @@ class UserController extends Controller
                 'error' => $validator->errors()->first()
             ]);
         }
-
-        return $this->responseWithJson($request, $this->userServices->list($request->all()));
+        return $this->responseWithJson($request, $this->userServices->list($request));
     }
 
     /**
@@ -65,11 +64,11 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
-        $limit = config('limit.users');
+        $limit = config('limit');
         $validator=Validator::make($request->all(), [
-            'account'  => 'required|'.$limit['account'],
-            'password' => 'required|'.$limit['password'],
-            'password_confirmation' => 'required|'.$limit['password_confirmation'],
+            'account'  => 'required|'.$limit['users']['account'],
+            'password' => 'required|'.$limit['user_confirmed']['password'],
+            'password_confirmation' => 'required|'.$limit['user_confirmed']['password_confirmation'],
         ]);
         // 驗證參數
         if ($validator->fails()) {
@@ -91,11 +90,11 @@ class UserController extends Controller
     public function editUser(Request $request)
     {
         //
-        $limit = config('limit.users');
+        $limit = config('limit');
         $this->validate($request, [
-            'account'  => 'required|'.$limit['account'],
-            'password' => 'required|'.$limit['password'],
-            'password_confirmation' => 'required|'.$limit['password_confirmation'],
+            'account'  => 'required|'.$limit['users']['account'],
+            'password' => 'required|'.$limit['user_confirmed']['password'],
+            'password_confirmation' => 'required|'.$limit['user_confirmed']['password_confirmation'],
         ]);
 
         return $this->responseWithJson($request, $this->userServices->editUser($request));
@@ -108,7 +107,19 @@ class UserController extends Controller
      */
     public function delete(Request $request)
     {
-        return $this->responseWithJson($request, $this->userServices->delete());
+        $limit = config('limit.users');
+        $validator=Validator::make($request->all(), [
+            'account'  => $limit['account'],
+        ]);
+        // 驗證參數
+        if ($validator->fails()) {
+            return $this->responseWithJson($request, [
+                'code' => config('apiCode.validateFail'),
+                'error' => $validator->errors()->first()
+            ]);dd(123);
+        }
+        //dd($request->all());
+        return $this->responseWithJson($request, $this->userServices->delete($request));
     }
 
 }
