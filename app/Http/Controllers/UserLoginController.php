@@ -35,7 +35,7 @@ class UserLoginController extends Controller
         $limit = config('limit');
 
         $this->validate($request, [
-            'user_account'  => 'required|'.$limit['users']['account'],
+            'user_account'  => $limit['users']['account'],
             'time'  => 'required|'.$limit['user_login']['time'],
             'time_end'  => 'required|'.$limit['user_login']['time'],
         ]);

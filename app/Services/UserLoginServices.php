@@ -15,14 +15,14 @@ use Tymon\JWTAuth\JWTAuth;
 
 class UserLoginServices
 {
-    private $UserLoginServices;
+    private $UserLoginRepository;
     private $JWTAuth;
 
     public function __construct(
-        UserLoginRepository $UserLoginServices,
+        UserLoginRepository $UserLoginRepository,
         JWTAuth $JWTAuth
     ){
-        $this->UserLoginServices = $UserLoginServices;
+        $this->UserLoginRepository = $UserLoginRepository;
         $this->JWTAuth = $JWTAuth;
     }
 
@@ -35,13 +35,22 @@ class UserLoginServices
     public function list($request)
     {
         try {
-            $user_log = $this->UserLoginServices->list
-            (
-                ['user_account' => $request['user_account']],
-                ['time' => $request['time']],
-                ['time_end' => $request['time_end']]
-            );
+                //dd(['time' => $request['time']]);
+//            if (['user_account' => $request['user_account']] != '')
+//            {
 
+             $user_log = $this->UserLoginRepository->list(
+                 $request->input('user_account'),
+                 ['time' => $request['time']],
+                 ['time_end' => $request['time_end']]
+             );
+             //dd(123);
+//            }else{
+//                $user_log = $this->UserLoginServices->index(
+//                    ['time' => $request['time']],
+//                    ['time_end' => $request['time_end']]
+//                );
+//            }
             return [
                 'code'   => config('apiCode.success'),
                 'result' => $user_log,

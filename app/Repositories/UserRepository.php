@@ -61,9 +61,9 @@ class UserRepository
         return User::get();
     }
 
-    public function delete($id, $account)
+    public function delete($account)
     {
-        return User::find($id)->destroy($account);
+        return User::where('account', $account)->delete();
     }
 
     public function oldToken()

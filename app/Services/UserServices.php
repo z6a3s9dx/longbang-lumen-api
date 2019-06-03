@@ -193,10 +193,13 @@ class UserServices
     public function delete($request)
     {
         try{
-            $parseToken = $this->JWTAuth->parseToken()->authenticate();
-            if ($parseToken['account'] !== "thothadmin")
-            {//dd($request->all());
-                $result = $this->userRepository->delete($parseToken['id'], ['account' => $request['account']]);
+            //$parseToken = $this->JWTAuth->parseToken()->authenticate();
+            //dd($request->all());
+            if ($request['account'] !== "thothadmin")
+            {
+                $result = $this->userRepository->delete(
+                    ['account' => $request['account']]
+                );
                 return [
                     'code'   => config('apiCode.success'),
                     'result' => $result
