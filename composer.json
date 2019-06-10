@@ -9,7 +9,9 @@
         "laravel/lumen-framework": "5.6.*",
         "vlucas/phpdotenv": "~2.2",
         "flipbox/lumen-generator": "^5.6",
-        "tymon/jwt-auth": "^1.0@dev"
+        "tymon/jwt-auth": "^1.0@dev",
+        "guzzlehttp/guzzle": "^6.3",
+        "jellybool/laravel-md5-hashing": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

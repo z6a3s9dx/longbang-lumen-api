@@ -35,6 +35,19 @@ $router->group(['prefix' => 'api/login/'], function () use ($router) {
    });
 });
 
+$router->group(['prefix' => 'api/v2/'], function () use ($router) {
+    //會員資料
+    $router->group(['prefix' => 'members'], function () use ($router) {
+        $router->get('/apiGet','MembersController@apiGet');
+
+        $router->group(['middleware' => 'jwt.auth'], function () use ($router) {
+            $router->post('/', 'MembersController@create');
+            $router->put('/{id}','MembersController@editUser');
+            $router->delete('/{id}','MembersController@delete');
+        });
+    });
+});
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });

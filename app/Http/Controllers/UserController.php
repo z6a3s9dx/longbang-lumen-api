@@ -72,9 +72,10 @@ class UserController extends Controller
         ]);
         // 驗證參數
         if ($validator->fails()) {
-            $result = ['result' => '', 'code' => config('apiCode.validateFail'),
-                'error' => $validator->errors()->first()];
-            return $this->responseWithJson($request, $result);
+            return $this->responseWithJson($request, [
+                'result' => '', 'code' => config('apiCode.validateFail'),
+                'error' => $validator->errors()->first()
+            ]);
         }
 
         return $this->responseWithJson($request, $this->userServices->create($request));
@@ -116,7 +117,7 @@ class UserController extends Controller
             return $this->responseWithJson($request, [
                 'code' => config('apiCode.validateFail'),
                 'error' => $validator->errors()->first()
-            ]);dd(123);
+            ]);
         }
         //dd($request->all());
         return $this->responseWithJson($request, $this->userServices->delete($request));

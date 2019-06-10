@@ -16,5 +16,9 @@ return [
 
     'user_login' => [
         'time' =>'date_format:Y-m-d H:i:s',
+    ],
+
+    'members' => [
+        'mobile' => 'numeric|digits:10'
     ]
 ];
